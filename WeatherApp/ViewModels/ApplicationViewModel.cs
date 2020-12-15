@@ -2,8 +2,11 @@
 using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Windows;
 using WeatherApp.Commands;
 using WeatherApp.Models;
 using WeatherApp.Services;
@@ -69,8 +72,9 @@ namespace WeatherApp.ViewModels
         public DelegateCommand<string> ExportCommand { get; set; }
 
         /// <summary>
-        /// TODO 13a [ ] : Ajouter ChangeLanguageCommand
+        /// TODO 13a [x] : Ajouter ChangeLanguageCommand
         /// </summary>
+        public DelegateCommand<string> ChangeLanguageCommand { get; set; }
 
         public List<BaseViewModel> ViewModels
         {
@@ -93,7 +97,8 @@ namespace WeatherApp.ViewModels
             /// TODO 03 [x] : Instancier ImportCommand qui doit appeler la méthode Import
             ImportCommand = new DelegateCommand<string>(Import);
 
-            /// TODO 13b [ ] : Instancier ChangeLanguageCommand qui doit appeler la méthode ChangeLanguage
+            /// TODO 13b [x] : Instancier ChangeLanguageCommand qui doit appeler la méthode ChangeLanguage
+            ChangeLanguageCommand = new DelegateCommand<string>(ChangeLanguage);
 
             initViewModels();          
 
@@ -254,9 +259,24 @@ namespace WeatherApp.ViewModels
 
         private void ChangeLanguage (string language)
         {
-            /// TODO 13c [ ] : Compléter la méthode pour permettre de changer la langue
+            /// TODO 13c [x] : Compléter la méthode pour permettre de changer la langue
             /// Ne pas oublier de demander à l'utilisateur de redémarrer l'application
             /// Aide : ApiConsumerDemo
+            if (Properties.Settings.Default.Language == language)
+            {
+                return;
+            }
+
+            Properties.Settings.Default.Language = language;
+            Properties.Settings.Default.Save();
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(language);
+
+            var res = MessageBox.Show("Changing languages requires an application restart. Do you want to restart now?", "Restart Application", MessageBoxButton.YesNo);
+            if (res == MessageBoxResult.Yes)
+            {
+                Process.Start(Process.GetCurrentProcess().MainModule.FileName);
+                Application.Current.Shutdown();
+            }
         }
 
         #endregion
