@@ -7,8 +7,8 @@ namespace WeatherApp
     /// </summary>
     public partial class App : Application
     {
-        /// TODO 11 : Ajouter les ressources linguistiques au projet
-        /// TODO 12 : Charger la langue d'affichage
+        /// TODO 11 [ ] : Ajouter les ressources linguistiques au projet
+        /// TODO 12 [ ] : Charger la langue d'affichage
 
         protected override void OnStartup(StartupEventArgs e)
         {

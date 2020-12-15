@@ -96,7 +96,7 @@ namespace WeatherApp.ViewModels
 
             if (CurrentTemp != null)
             {
-                /// TODO 01 : Insérer la température à la position 0 de la collection
+                /// TODO 01 [x] : Insérer la température à la position 0 de la collection
                 /// Description détaillée :
                 /// À chaque fois que l'on clique sur le bouton "Get Data". On veut 
                 /// insérer la température à la position 0 de la collection.
@@ -104,6 +104,8 @@ namespace WeatherApp.ViewModels
                 /// dernière température insérée dans la liste est différente
                 /// que celle que l'on vient de récupérer.
                 /// Utiliser la méthode Insert de la collection
+
+                Temperatures.Insert(0, CurrentTemp);
 
                 Debug.WriteLine(CurrentTemp);
             }
