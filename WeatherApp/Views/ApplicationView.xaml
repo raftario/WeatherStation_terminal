@@ -8,7 +8,7 @@
         xmlns:models="clr-namespace:WeatherApp.ViewModels"
         xmlns:p="clr-namespace:WeatherApp.Properties"
         mc:Ignorable="d"
-        Title="My Weather Station" Height="450" Width="400">
+        Title="{x:Static p:Resources.wn_title}" Height="450" Width="400">
     <Window.Resources>
         <DataTemplate DataType="{x:Type models:TemperatureViewModel}">
             <views:TemperatureView/>

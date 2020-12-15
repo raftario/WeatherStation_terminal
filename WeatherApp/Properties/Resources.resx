@@ -123,10 +123,6 @@
   <data name="btn_save" xml:space="preserve">
     <value>Save</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="fog_foggy_weather_icon_1320196634851598977_128" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\fog+foggy+weather+icon-1320196634851598977_128.ico;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="lbl_apiKey" xml:space="preserve">
     <value>API key :</value>
   </data>

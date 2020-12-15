@@ -15,10 +15,10 @@ namespace WeatherApp
         {
             base.OnStartup(e);
 
-            ApplicationView app = new ApplicationView();
-
             var lang = WeatherApp.Properties.Settings.Default.Language;
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(lang);
+
+            ApplicationView app = new ApplicationView();
 
             app.Show();
 

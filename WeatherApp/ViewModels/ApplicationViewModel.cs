@@ -2,6 +2,7 @@
 using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace WeatherApp.ViewModels
         public BaseViewModel CurrentViewModel
         {
             get { return currentViewModel; }
-            set { 
+            set {
                 currentViewModel = value;
                 OnPropertyChanged();
             }
@@ -81,7 +82,7 @@ namespace WeatherApp.ViewModels
             get {
                 if (viewModels == null)
                     viewModels = new List<BaseViewModel>();
-                return viewModels; 
+                return viewModels;
             }
         }
         #endregion
@@ -100,7 +101,7 @@ namespace WeatherApp.ViewModels
             /// TODO 13b [x] : Instancier ChangeLanguageCommand qui doit appeler la méthode ChangeLanguage
             ChangeLanguageCommand = new DelegateCommand<string>(ChangeLanguage);
 
-            initViewModels();          
+            initViewModels();
 
             CurrentViewModel = ViewModels[0];
 
@@ -111,6 +112,8 @@ namespace WeatherApp.ViewModels
         {
             /// TemperatureViewModel setup
             tvm = new TemperatureViewModel();
+            tvm.Temperatures.CollectionChanged += Temperatures_CollectionChanged;
+            tvm.PropertyChanged += Tvm_PropertyChanged;
 
             string apiKey = "";
 
@@ -129,7 +132,7 @@ namespace WeatherApp.ViewModels
 
                 ows = new OpenWeatherService(apiKey);
             }
-                
+
             tvm.SetTemperatureService(ows);
             ViewModels.Add(tvm);
 
@@ -137,20 +140,32 @@ namespace WeatherApp.ViewModels
             ViewModels.Add(cvm);
         }
 
+        private void Temperatures_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            ExportCommand.RaiseCanExecuteChanged();
+        }
 
+        private void Tvm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(TemperatureViewModel.Temperatures))
+            {
+                tvm.Temperatures.CollectionChanged += Temperatures_CollectionChanged;
+                ExportCommand.RaiseCanExecuteChanged();
+            }
+        }
 
         private void ChangePage(string pageName)
-        {            
+        {
             if (CurrentViewModel is ConfigurationViewModel)
             {
                 ows.SetApiKey(Properties.Settings.Default.apiKey);
 
                 var vm = (TemperatureViewModel)ViewModels.FirstOrDefault(x => x.Name == typeof(TemperatureViewModel).Name);
                 if (vm.TemperatureService == null)
-                    vm.SetTemperatureService(ows);                
+                    vm.SetTemperatureService(ows);
             }
 
-            CurrentViewModel = ViewModels.FirstOrDefault(x => x.Name == pageName);  
+            CurrentViewModel = ViewModels.FirstOrDefault(x => x.Name == pageName);
         }
 
         /// <summary>
@@ -271,7 +286,7 @@ namespace WeatherApp.ViewModels
             Properties.Settings.Default.Save();
             Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(language);
 
-            var res = MessageBox.Show("Changing languages requires an application restart. Do you want to restart now?", "Restart Application", MessageBoxButton.YesNo);
+            var res = MessageBox.Show(Properties.Resources.msg_restart, Properties.Resources.wn_warning, MessageBoxButton.YesNo);
             if (res == MessageBoxResult.Yes)
             {
                 Process.Start(Process.GetCurrentProcess().MainModule.FileName);
