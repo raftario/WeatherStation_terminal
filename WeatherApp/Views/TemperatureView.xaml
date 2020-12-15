@@ -16,7 +16,26 @@
         <Button DockPanel.Dock="Top" Content="{x:Static p:Resources.btn_getData}" Command="{Binding GetTempCommand}"/>
         <!-- TODO 01b : Ajouter la ListView qui est liée avec la collection de Temperatures -->
         <!-- Voir la solution 14_pratique_examen, projet : demo_listView -->
-        <ListView/>
+        <ListView DockPanel.Dock="Bottom" ItemsSource="{Binding Temperatures}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static p:Resources.lbl_city}" />
+                            <TextBlock Text="{Binding City}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static p:Resources.lbl_dataTime}" />
+                            <TextBlock Text="{Binding DateTime}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static p:Resources.lbl_temperature}" />
+                            <TextBlock Text="{Binding Temperature}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
     </DockPanel>
 </UserControl>
