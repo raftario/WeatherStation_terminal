@@ -86,8 +86,9 @@ namespace WeatherApp.ViewModels
         {
             ChangePageCommand = new DelegateCommand<string>(ChangePage);
 
-            /// TODO 06 [ ] : Instancier ExportCommand qui doit appeler la méthode Export
+            /// TODO 06 [x] : Instancier ExportCommand qui doit appeler la méthode Export
             /// Ne peut s'exécuter que la méthode CanExport retourne vrai
+            ExportCommand = new DelegateCommand<string>(Export, CanExport);
 
             /// TODO 03 [x] : Instancier ImportCommand qui doit appeler la méthode Import
             ImportCommand = new DelegateCommand<string>(Import);
@@ -148,14 +149,9 @@ namespace WeatherApp.ViewModels
         }
 
         /// <summary>
-        /// TODO 07 [ ] : Méthode CanExport ne retourne vrai que si la collection a du contenu
+        /// TODO 07 [x] : Méthode CanExport ne retourne vrai que si la collection a du contenu
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        private bool CanExport(string obj)
-        {
-            throw new NotImplementedException();
-        }
+        private bool CanExport(string _) => tvm.Temperatures.Count > 0;
 
         /// <summary>
         /// Méthode qui exécute l'exportation
@@ -171,7 +167,7 @@ namespace WeatherApp.ViewModels
                 saveFileDialog.DefaultExt = "json";
             }
 
-            /// TODO 08 [ ] : Code pour afficher la boîte de dialogue de sauvegarde
+            /// TODO 08 [x] : Code pour afficher la boîte de dialogue de sauvegarde
             /// Voir
             /// Solution : 14_pratique_examen
             /// Projet : demo_openFolderDialog
@@ -181,12 +177,17 @@ namespace WeatherApp.ViewModels
             ///   Garder le nom du fichier dans Filename
             ///   Appeler la méthode saveToFile
             ///   
-
+            var result = saveFileDialog.ShowDialog();
+            if (result == true)
+            {
+                Filename = saveFileDialog.FileName;
+                saveToFile();
+            }
         }
 
         private void saveToFile()
         {
-            /// TODO 09 [ ] : Code pour sauvegarder dans le fichier
+            /// TODO 09 [x] : Code pour sauvegarder dans le fichier
             /// Voir 
             /// Solution : 14_pratique_examen
             /// Projet : serialization_object
@@ -198,7 +199,10 @@ namespace WeatherApp.ViewModels
             /// Sérialiser la collection de températures
             /// Écrire dans le fichier
             /// Fermer le fichier           
-
+            using var sw = new StreamWriter(Filename);
+            var json = JsonConvert.SerializeObject(tvm.Temperatures);
+            sw.Write(json);
+            sw.Close();
         }
 
         private void openFromFile()
